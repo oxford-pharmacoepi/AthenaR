@@ -17,7 +17,7 @@ downloadVocabulary <- function(vocabulary, path = getwd()) {
   vocabularies <- fetchVocabularies()
   omopgenerics::assertChoice(vocabulary, vocabularies$vocabulary_version, length = 1)
   omopgenerics::assertCharacter(path, length = 1)
-  url <- vocabularies$link[vocabularies$vocabulary_version == vocabulary]
+  url <- vocabularies$url[vocabularies$vocabulary_version == vocabulary]
 
   if (!dir.exists(path)) {
     cli::cli_abort(c("x" = "{.path {path}} does not exist."))
