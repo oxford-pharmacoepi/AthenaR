@@ -41,9 +41,41 @@ downloadVocabulary <- function(vocabulary, path = getwd()) {
 
   dir.create(pathV)
 
-  utils::download.file(url = url, destfile = file.path(pathV, "raw.zip"))
+  safeDownload(url = url, dest = file.path(pathV, "raw.zip"))
 }
 
 fetchVocabularies <- function() {
   utils::read.csv(file = "https://raw.githubusercontent.com/oxford-pharmacoepi/AthenaR/refs/heads/main/extras/links.csv")
+}
+safeDownload <- function(url, dest) {
+  to <- getOption("timeout")
+  cli::cli_inform(c("i" = "Attempting download with {.emph timeout = {.pkg {to}}}"))
+
+  dw <- tryCatch({
+    download(url = url, destfile = dest)
+    TRUE
+  },
+  error = function(e) {
+    FALSE
+  })
+
+  if (isFALSE(dw)) {
+    options(timeout = 5 * to)
+    on.exit(options(timeout = to))
+    dw <- tryCatch({
+      download(url = url, destfile = dest)
+      TRUE
+    },
+    error = function(e) {
+      FALSE
+    })
+    if (isFALSE(dw)) {
+      cli::cli_inform(c("x" = "Second attempt failed, try increase manually timeout with {.code options(timeout = xxx)}."))
+    }
+  }
+
+  return(dw)
+}
+download <- function(url, dest) {
+  utils::download.file(url = url, destfile = dest)
 }
