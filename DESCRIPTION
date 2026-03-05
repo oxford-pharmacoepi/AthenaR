@@ -14,3 +14,7 @@ Suggests:
     testthat
 URL: https://oxford-pharmacoepi.github.io/AthenaR/
 BugReports: https://github.com/oxford-pharmacoepi/AthenaR/issues
+Imports: 
+    cli,
+    omopgenerics,
+    rlang
