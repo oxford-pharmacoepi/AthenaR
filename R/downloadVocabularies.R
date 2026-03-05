@@ -52,7 +52,7 @@ safeDownload <- function(url, dest) {
   cli::cli_inform(c("i" = "Attempting download with {.emph timeout = {.pkg {to}}}"))
 
   dw <- tryCatch({
-    download(url = url, destfile = dest)
+    download(url = url, dest = dest, to = to)
     TRUE
   },
   error = function(e) {
@@ -60,10 +60,8 @@ safeDownload <- function(url, dest) {
   })
 
   if (isFALSE(dw)) {
-    options(timeout = 5 * to)
-    on.exit(options(timeout = to))
     dw <- tryCatch({
-      download(url = url, destfile = dest)
+      download(url = url, dest = dest, to = 5 * to)
       TRUE
     },
     error = function(e) {
@@ -76,6 +74,20 @@ safeDownload <- function(url, dest) {
 
   return(dw)
 }
-download <- function(url, dest) {
-  utils::download.file(url = url, destfile = dest)
+download <- function(url, dest, to) {
+  pb <- cli::cli_progress_bar(format = "[:bar] :percent :elapsed", type = "download")
+  withr::with_options(list(timeout = to), {
+    utils::download.file(
+      url = url,
+      destfile = dest,
+      mode = "wb",
+      method = "auto",
+      quiet = FALSE,
+      extra = list(progressfunction = function(downloaded, total) {
+        rogress <- min(1, downloaded/total)
+        cli::cli_progress_update(id = pb, set = progress)
+      })
+    )
+  })
+  cli::cli_progress_done(id = pb)
 }
