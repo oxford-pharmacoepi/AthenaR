@@ -1,4 +1,4 @@
 library(testthat)
-library(EmptyPackage)
+library(AthenaR)
 
-test_check("EmptyPackage")
+test_check("AthenaR")
