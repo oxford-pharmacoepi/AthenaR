@@ -84,7 +84,7 @@ download <- function(url, dest, to) {
       method = "auto",
       quiet = FALSE,
       extra = list(progressfunction = function(downloaded, total) {
-        rogress <- min(1, downloaded/total)
+        progress <- min(1, downloaded/total)
         cli::cli_progress_update(id = pb, set = progress)
       })
     )
