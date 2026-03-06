@@ -60,6 +60,7 @@ safeDownload <- function(url, dest) {
   })
 
   if (isFALSE(dw)) {
+    cli::cli_inform(c("!" = "First attempt failed, attempting second download with {.emph timeout = {.pkg {5 * to}}}"))
     dw <- tryCatch({
       download(url = url, dest = dest, to = 5 * to)
       TRUE
@@ -75,19 +76,9 @@ safeDownload <- function(url, dest) {
   return(dw)
 }
 download <- function(url, dest, to) {
-  pb <- cli::cli_progress_bar(format = "[:bar] :percent :elapsed", type = "download")
   withr::with_options(list(timeout = to), {
     utils::download.file(
-      url = url,
-      destfile = dest,
-      mode = "wb",
-      method = "auto",
-      quiet = FALSE,
-      extra = list(progressfunction = function(downloaded, total) {
-        progress <- min(1, downloaded/total)
-        cli::cli_progress_update(id = pb, set = progress)
-      })
+      url = url, destfile = dest, mode = "wb", method = "auto", quiet = FALSE
     )
   })
-  cli::cli_progress_done(id = pb)
 }
