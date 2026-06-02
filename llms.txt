@@ -4,6 +4,10 @@
 
 ## All functions
 
+- [`cdmFromVocabulary()`](https://oxford-pharmacoepi.github.io/AthenaR/reference/cdmFromVocabulary.md)
+  : Create a vocabulary cdm_reference
 - [`downloadVocabulary()`](https://oxford-pharmacoepi.github.io/AthenaR/reference/downloadVocabulary.md)
   : Download a certain vocabulary version from ATHENA
+- [`insertVocabulary()`](https://oxford-pharmacoepi.github.io/AthenaR/reference/insertVocabulary.md)
+  : Insert the vocabulary tables into a database
 

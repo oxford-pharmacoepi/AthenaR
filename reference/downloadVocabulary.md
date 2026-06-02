@@ -5,7 +5,7 @@ Download a certain vocabulary version from ATHENA
 ## Usage
 
 ``` r
-downloadVocabulary(vocabulary, path = getwd())
+downloadVocabulary(vocabulary, path = omopDataFolder("AthenaR"))
 ```
 
 ## Arguments
@@ -14,7 +14,7 @@ downloadVocabulary(vocabulary, path = getwd())
 
   The vocabulary version to download.
 
-- path:
+- vocabularyPath:
 
   Path to save the vocabulary files.
 
@@ -26,6 +26,8 @@ The vocabularies are downloaded in path.
 
 ``` r
 if (FALSE) { # \dontrun{
+library(AthenaR)
+
 downloadVocabulary(vocabulary = "v20260227")
 } # }
 ```
