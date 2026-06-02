@@ -23,25 +23,19 @@ downloadVocabulary <- function(vocabulary, path = getwd()) {
     cli::cli_abort(c("x" = "{.path {path}} does not exist."))
   }
 
-  pathV <- file.path(path, vocabulary)
-  if (dir.exists(pathV)) {
-    cli::cli_inform(c("!" = "Folder {.pkg {vocabulary}} already exists in {.path {path}}"))
-    if (!rlang::is_interactive()) {
-      cli::cli_inform(c("!" = "Deleting existing content in {.path {pathV}}."))
-      unlink(pathV, recursive = TRUE)
+  nm <- paste0(vocabulary, ".zip")
+  fullPath <- file.path(path, nm)
+  if (file.exists(fullPath)) {
+    cli::cli_inform(c("!" = "File {.path {fullPath}} already exists."))
+    overwrite <- utils::menu(choices = c("Yes, delete content.", "No, abort."), title = "Do you want to overwrite the content?")
+    if (overwrite == 1) {
+      unlink(fullPath)
     } else {
-      overwrite <- utils::menu(choices = c("Yes, delete content.", "No, abort."), title = "Do you want to overwrite the content?")
-      if (overwrite == 1) {
-        unlink(pathV, recursive = TRUE)
-      } else {
-        cli::cli_abort(c("x" = "Aborting download, files already present"))
-      }
+      cli::cli_abort(c("x" = "Aborting download, file already present"))
     }
   }
 
-  dir.create(pathV)
-
-  safeDownload(url = url, dest = file.path(pathV, "raw.zip"))
+  safeDownload(url = url, dest = fullPath)
 }
 
 fetchVocabularies <- function() {
