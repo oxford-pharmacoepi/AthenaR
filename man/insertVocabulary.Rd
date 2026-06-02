@@ -8,7 +8,7 @@ insertVocabulary(
   vocabulary,
   con,
   cdmSchema,
-  vocabularyPath = omopDataFolder("AthenaR")
+  vocabularyPath = file.path(omopDataFolder(), "AthenaR")
 )
 }
 \arguments{

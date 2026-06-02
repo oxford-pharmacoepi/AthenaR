@@ -16,11 +16,11 @@ fetchVocabularies <- function() {
 validateVocabulary <- function(vocabulary, vocabularies, call = parent.frame()) {
   omopgenerics::assertChoice(vocabulary, vocabularies$vocabulary_version, length = 1, call = call)
 }
-validatePath <- function(path, nm = "path", call = parent.frame()) {
-  omopgenerics::assertCharacter(path, nm = nm, length = 1, call = call)
-  if (!dir.exists(path)) {
+validateVocabularyPath <- function(vocabularyPath, call = parent.frame()) {
+  omopgenerics::assertCharacter(vocabularyPath, length = 1, call = call)
+  if (!dir.exists(vocabularyPath)) {
     cli::cli_inform(c(i = "{.path {nm}} does not exist, creating it..."))
-    dir.create(path)
+    dir.create(vocabularyPath)
   }
-  invisible(path)
+  invisible(vocabularyPath)
 }

@@ -4,7 +4,10 @@
 \alias{downloadVocabulary}
 \title{Download a certain vocabulary version from ATHENA}
 \usage{
-downloadVocabulary(vocabulary, path = omopDataFolder("AthenaR"))
+downloadVocabulary(
+  vocabulary,
+  vocabularyPath = file.path(omopDataFolder(), "AthenaR")
+)
 }
 \arguments{
 \item{vocabulary}{The vocabulary version to download.}

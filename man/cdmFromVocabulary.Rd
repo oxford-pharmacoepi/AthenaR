@@ -4,7 +4,10 @@
 \alias{cdmFromVocabulary}
 \title{Create a vocabulary cdm_reference}
 \usage{
-cdmFromVocabulary(vocabulary, vocabularyPath = omopDataFolder("AthenaR"))
+cdmFromVocabulary(
+  vocabulary,
+  vocabularyPath = file.path(omopDataFolder(), "AthenaR")
+)
 }
 \arguments{
 \item{vocabulary}{The vocabulary version of interest. It will be downloaded

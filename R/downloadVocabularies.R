@@ -15,34 +15,44 @@
 #' }
 #'
 downloadVocabulary <- function(vocabulary,
-                               path = omopDataFolder("AthenaR")) {
+                               vocabularyPath = file.path(omopDataFolder(), "AthenaR")) {
+  downloadVocabularyInternal(
+    vocabulary = vocabulary,
+    vocabularyPath = vocabularyPath,
+    overwrite = "ask"
+  )
+}
+
+downloadVocabularyInternal <- function(vocabulary,
+                                       vocabularyPath,
+                                       overwrite = "ask",
+                                       call = parent.frame()) {
   # input check
   vocabularies <- fetchVocabularies()
-  vocabulary <- validateVocabulary(vocabulary, vocabularies)
-  path <- validatePath(path)
+  vocabulary <- validateVocabulary(vocabulary, vocabularies, call)
+  vocabularyPath <- validateVocabularyPath(vocabularyPath, call)
 
   url <- vocabularies$url[vocabularies$vocabulary_version == vocabulary]
 
-  if (!dir.exists(path)) {
-    cli::cli_abort(c("x" = "{.path {path}} does not exist."))
-  }
-
   nm <- paste0(vocabulary, ".zip")
-  fullPath <- file.path(path, nm)
+  fullPath <- file.path(vocabularyPath, nm)
   if (file.exists(fullPath)) {
-    cli::cli_inform(c("!" = "File {.path {fullPath}} already exists."))
-    overwrite <- utils::menu(choices = c("Yes, delete content.", "No, abort."), title = "Do you want to overwrite the content?")
-    if (overwrite == 1) {
-      unlink(fullPath)
-    } else {
-      cli::cli_abort(c("x" = "Aborting download, file already present"))
+    if (overwrite == "no") {
+      return(TRUE)
+    } else if (overwrite == "ask") {
+      cli::cli_inform(c("!" = "File {.path {fullPath}} already exists."))
+      overwrite <- utils::menu(choices = c("Yes, delete content.", "No"), title = "Do you want to overwrite the content?")
+      if (overwrite == 1) {
+        unlink(fullPath)
+      } else {
+        return(TRUE)
+      }
     }
   }
 
-  safeDownload(url = url, dest = fullPath)
+  safeDownload(url = url, dest = fullPath, call = call)
 }
-
-safeDownload <- function(url, dest) {
+safeDownload <- function(url, dest, call) {
   to <- getOption("timeout")
   cli::cli_inform(c("i" = "Attempting download with {.emph timeout = {.pkg {to}}}"))
 
@@ -64,7 +74,7 @@ safeDownload <- function(url, dest) {
       FALSE
     })
     if (isFALSE(dw)) {
-      cli::cli_inform(c("x" = "Second attempt failed, try increase manually timeout with {.code options(timeout = xxx)}."))
+      cli::cli_abort(c("x" = "Second attempt failed, try increase manually timeout with {.code options(timeout = xxx)}."), call = call)
     }
   }
 

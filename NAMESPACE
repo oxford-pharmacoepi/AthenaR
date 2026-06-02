@@ -3,3 +3,5 @@
 export(cdmFromVocabulary)
 export(downloadVocabulary)
 export(insertVocabulary)
+export(omopDataFolder)
+importFrom(omopgenerics,omopDataFolder)
