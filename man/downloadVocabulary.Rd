@@ -4,12 +4,12 @@
 \alias{downloadVocabulary}
 \title{Download a certain vocabulary version from ATHENA}
 \usage{
-downloadVocabulary(vocabulary, path = getwd())
+downloadVocabulary(vocabulary, path = omopDataFolder("AthenaR"))
 }
 \arguments{
 \item{vocabulary}{The vocabulary version to download.}
 
-\item{path}{Path to save the vocabulary files.}
+\item{vocabularyPath}{Path to save the vocabulary files.}
 }
 \value{
 The vocabularies are downloaded in path.
@@ -19,6 +19,8 @@ Download a certain vocabulary version from ATHENA
 }
 \examples{
 \dontrun{
+library(AthenaR)
+
 downloadVocabulary(vocabulary = "v20260227")
 }
 

@@ -1,9 +1,25 @@
 
+#' Create a vocabulary cdm_reference
+#'
+#' @param vocabulary The vocabulary version of interest. It will be downloaded
+#' if not already provided.
+#' @param vocabularyPath Path to save/read the vocabulary files.
+#'
+#' @returns A cdm_reference object with the vocabulary of interest.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(AthenaR)
+#'
+#' cdm <- cdmFromVocabulary(vocabulary = "v20260227")
+#' }
+#'
 cdmFromVocabulary <- function(vocabulary,
-                              vocabularyPath) {
-}
-prepareVocabulary <- function(vocabulary, vocabularyPath, call = parent.frame()) {
-  omopgenerics::assertCharacter(vocabulary, length = 1, call = call)
+                              vocabularyPath = omopDataFolder("AthenaR")) {
+  vocabularies <- fetchVocabularies()
+  vocabulary <- validateVocabulary(vocabulary, vocabularies)
+  vocabularyPath <- validatePath(vocabularyPath, "vocabularyPath")
 
   # assert if cdm exists
   dbdir <- file.path(vocabularyPath, paste0(vocabulary, ".duckdb"))
@@ -38,18 +54,28 @@ prepareVocabulary <- function(vocabulary, vocabularyPath, call = parent.frame())
     }
     unlink(tmpDir, recursive = TRUE)
 
+    duckdb::dbSendQuery(conn = con, statement = "CREATE SCHEMA results")
+
+    cdm <- CDMConnector::cdmFromCon(
+      con = con,
+      cdmSchema = "main",
+      writeSchema = "main",
+      cdmName = vocabulary,
+      .softValidation = TRUE
+    ) |>
+      omopgenerics::emptyOmopTable(name = "person") |>
+      omopgenerics::emptyOmopTable(name = "observation_period")
   } else {
     cli::cli_inform(c(i = "Reading existing {.path {dbdir}}."))
     con <- duckdb::dbConnect(drv = duckdb::duckdb(dbdir = dbdir))
   }
 
-  cdm <- CDMConnector::cdmFromCon(
+  CDMConnector::cdmFromCon(
     con = con,
     cdmSchema = "main",
     writeSchema = "results",
     cdmName = vocabulary
   )
-
 }
 tableSpec <- function() {
   list(

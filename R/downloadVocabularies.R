@@ -2,21 +2,25 @@
 #' Download a certain vocabulary version from ATHENA
 #'
 #' @param vocabulary The vocabulary version to download.
-#' @param path Path to save the vocabulary files.
+#' @param vocabularyPath Path to save the vocabulary files.
 #'
 #' @returns The vocabularies are downloaded in path.
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' library(AthenaR)
+#'
 #' downloadVocabulary(vocabulary = "v20260227")
 #' }
 #'
-downloadVocabulary <- function(vocabulary, path = getwd()) {
+downloadVocabulary <- function(vocabulary,
+                               path = omopDataFolder("AthenaR")) {
   # input check
   vocabularies <- fetchVocabularies()
-  omopgenerics::assertChoice(vocabulary, vocabularies$vocabulary_version, length = 1)
-  omopgenerics::assertCharacter(path, length = 1)
+  vocabulary <- validateVocabulary(vocabulary, vocabularies)
+  path <- validatePath(path)
+
   url <- vocabularies$url[vocabularies$vocabulary_version == vocabulary]
 
   if (!dir.exists(path)) {
@@ -38,9 +42,6 @@ downloadVocabulary <- function(vocabulary, path = getwd()) {
   safeDownload(url = url, dest = fullPath)
 }
 
-fetchVocabularies <- function() {
-  utils::read.csv(file = "https://raw.githubusercontent.com/oxford-pharmacoepi/AthenaR/refs/heads/main/extras/links.csv")
-}
 safeDownload <- function(url, dest) {
   to <- getOption("timeout")
   cli::cli_inform(c("i" = "Attempting download with {.emph timeout = {.pkg {to}}}"))
@@ -71,8 +72,6 @@ safeDownload <- function(url, dest) {
 }
 download <- function(url, dest, to) {
   withr::with_options(list(timeout = to), {
-    utils::download.file(
-      url = url, destfile = dest, mode = "wb", method = "auto", quiet = FALSE
-    )
+    curl::curl_download(url = url, destfile = dest, quiet = FALSE)
   })
 }
