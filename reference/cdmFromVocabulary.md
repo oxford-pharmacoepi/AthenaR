@@ -5,7 +5,10 @@ Create a vocabulary cdm_reference
 ## Usage
 
 ``` r
-cdmFromVocabulary(vocabulary, vocabularyPath = omopDataFolder("AthenaR"))
+cdmFromVocabulary(
+  vocabulary,
+  vocabularyPath = file.path(omopDataFolder(), "AthenaR")
+)
 ```
 
 ## Arguments

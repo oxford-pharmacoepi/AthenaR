@@ -5,7 +5,10 @@ Download a certain vocabulary version from ATHENA
 ## Usage
 
 ``` r
-downloadVocabulary(vocabulary, path = omopDataFolder("AthenaR"))
+downloadVocabulary(
+  vocabulary,
+  vocabularyPath = file.path(omopDataFolder(), "AthenaR")
+)
 ```
 
 ## Arguments

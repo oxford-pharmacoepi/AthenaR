@@ -42,7 +42,7 @@
 <span>  <span class="va">vocabulary</span>,</span>
 <span>  <span class="va">con</span>,</span>
 <span>  <span class="va">cdmSchema</span>,</span>
-<span>  vocabularyPath <span class="op">=</span> <span class="fu">omopDataFolder</span><span class="op">(</span><span class="st">"AthenaR"</span><span class="op">)</span></span>
+<span>  vocabularyPath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/omopDataFolder.html" class="external-link">omopDataFolder</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"AthenaR"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,7 +78,7 @@ if not already provided.</p></dd>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/AthenaR/">AthenaR</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">dbConnect</span><span class="op">(</span>drv <span class="op">=</span> <span class="fu">duckdb</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span>drv <span class="op">=</span> <span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">insertVocabulary</span><span class="op">(</span>vocabulary <span class="op">=</span> <span class="st">"v20260227"</span>, con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
